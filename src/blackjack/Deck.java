@@ -19,6 +19,7 @@ public class Deck {
 		size = 0;
 	}
 	
+	// Accessor Methods
 	public int getSize() { return size; }
 	
 	public int getCapacity() { return capacity; }
