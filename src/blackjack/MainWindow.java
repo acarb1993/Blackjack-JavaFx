@@ -6,13 +6,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainWindow {
 	
 	private Stage window;
 	private Scene scene;
-	private GridPane layout;
+	private VBox layout;
 	private Button playButton;
 	private Button exitButton;
 	private Label welcomeLabel;
@@ -37,10 +38,9 @@ public class MainWindow {
 		window = w;
 		window.setTitle("Blackjack");
 		
-		layout = new GridPane();
+		layout = new VBox();
 		layout.setPadding(new Insets(5, 5, 5, 5));
-		layout.setVgap(8);
-		layout.setHgap(10);
+		layout.setSpacing(10);
 		
 		scene = new Scene(layout, width, height);
 		scene.getStylesheets().add("MainWindowTheme.css");
