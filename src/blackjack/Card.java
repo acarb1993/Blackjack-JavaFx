@@ -5,7 +5,7 @@ public class Card implements Comparable<Card> {
 	private String rank, suit;
 	
 	public Card() {
-		int value = 0;
+		value = 0;
 		rank = suit = "";
 	}
 	

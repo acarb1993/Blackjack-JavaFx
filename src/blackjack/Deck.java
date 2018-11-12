@@ -24,18 +24,20 @@ public class Deck {
 	
 	public int getCapacity() { return capacity; }
 	
-	// Generates all of the cards that will go in the deck
+	// Generates all of the cards that will go in the deck unshuffled
 	public void generate() {
 		for (int i = 0; i < suits.length; i++) {
 			for (int j = 0; j < faces.length; j++) {
 				cards[size++] = new Card(0, suits[i], faces[j]);
+				deck.add(cards[size - 1]);
 			}
 		}
 	}
 	
-	// Fisher-Yates shuffle
+	// Fisher-Yates shuffle. Emptys the deck from generate() and shuffles the cards in the array, then re-added to the deck
 	public void shuffle() {
 		Random r = new Random();
+		deck.clear();
 		
 		// Swaps cards[i] with a random position in the deck then, puts that card into the random position
 		for (int i = 0; i < size; i++) {
@@ -47,14 +49,22 @@ public class Deck {
 		
 		// Adds the cards to the deck once it's been shuffled
 		for (Card c : cards) {  deck.add(c); }
+	}
+	
+	// Draw a card from the deck and return it.
+	public Card draw() throws Exception {
+		if (size <= 0) { throw new Exception("Error: Deck is empty!"); }
 		
-		for (Card c : deck) { 
-			System.out.println(c.toString() ); 
+		else {
+			size--;
+			return deck.pop();
 		}
 	}
 	
-	public Card draw() {
-		size--;
-		return deck.pop();
+	// Prints the entirity of the deck to the console.
+	public void showDeck() {
+		for (Card c : deck) {
+			System.out.println(c.toString() );
+		}
 	}
 }
