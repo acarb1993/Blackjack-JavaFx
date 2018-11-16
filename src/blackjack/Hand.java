@@ -28,7 +28,7 @@ public class Hand {
 		size++;
 	}
 	
-	// Prints the hand to the console
+	// Displays the hand to the console
 	public void showHand() {
 		for (Card c : hand) { 
 			System.out.println(c.toString() );

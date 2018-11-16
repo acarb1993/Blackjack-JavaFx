@@ -61,7 +61,7 @@ public class Deck {
 		}
 	}
 	
-	// Prints the entirity of the deck to the console.
+	// Displays the entirity of the deck to the console.
 	public void showDeck() {
 		for (Card c : deck) {
 			System.out.println(c.toString() );
