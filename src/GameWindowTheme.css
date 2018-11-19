@@ -1,7 +1,11 @@
 .vbox {
 	-fx-background-color: #556B2F;
-	-fx-border-style: solid;
 	-fx-padding: 10, 5, 0, 5;
+	-fx-position: absolute;
+}
+
+.hbox {
+	-fx-background-color: #556B2F;
 }
 
 .label {

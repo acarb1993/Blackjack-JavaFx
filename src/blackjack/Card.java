@@ -1,12 +1,20 @@
 package blackjack;
 
 public class Card implements Comparable<Card> {
-	private int value; // 0 to 10
+	private int value; // Integer from 0 to 10
 	private String rank, suit;
 	
+	// Constructors
 	public Card() {
 		value = 0;
 		rank = suit = "";
+	}
+	
+	public Card(String r, String s) {
+		value = 0;
+		rank = r;
+		suit = s;
+		
 	}
 	
 	public Card(int v, String r, String s) {

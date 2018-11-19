@@ -23,8 +23,8 @@ public class Hand {
 	}
 	
 	// Adds a card to the hand from a given deck
-	public void addToHand(Deck d) throws Exception { 
-		hand.add(d.draw() ); 
+	public void addToHand(Card c) { 
+		hand.add(c); 
 		size++;
 	}
 	
