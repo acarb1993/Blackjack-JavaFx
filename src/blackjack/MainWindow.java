@@ -23,14 +23,14 @@ public class MainWindow {
 	private int height;
 
 	// Constructor with a sensible default value
-	public MainWindow() {
+	public MainWindow() throws Exception {
 		width = 450;
 		height = 400;
 		gameWindow = new GameWindow();
 		
 	}
 	
-	public MainWindow(int w, int h) {
+	public MainWindow(int w, int h) throws Exception {
 		width = w;
 		height = h;
 		gameWindow = new GameWindow();
