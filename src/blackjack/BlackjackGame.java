@@ -4,7 +4,8 @@ public class BlackjackGame {
 	
 	private Deck deck;
 	private Hand playerHand, dealerHand;
-	private int cardValue, playerHandValue, dealerHandValue, startingHandSize, holeCardValue;
+	private Card holeCard;
+	private int cardValue, playerHandValue, dealerHandValue, startingHandSize, holeCardValue; // hole card is the dealer's card this face down and not visible to the player.
 
 	public BlackjackGame() {
 		deck = new Deck();
@@ -24,6 +25,8 @@ public class BlackjackGame {
 	
 	public Hand getDealerHand() { return dealerHand; }
 	
+	public boolean isHoleCard(Card c) { return holeCard == c; }
+	
 	public int getPlayerHandValue() { return playerHandValue; }
 	
 	public int getDealerHandValue() { return dealerHandValue; }
@@ -32,23 +35,29 @@ public class BlackjackGame {
 	
 	public int getHoleCardValue() { return holeCardValue; }
 	
-	//Mutator Methods
+	// Makes the value of the Hole Card visible to the player.
+	public void returnHoleCardValue() { dealerHandValue += holeCardValue; }
 	
 	public void generateGame() throws Exception {
 		deck.generate();
+		
 		for (int i = 0; i < deck.getSize(); i++) {
 			if (i % 4 == 0 && cardValue < 10) { cardValue++; }
 			deck.getStack().get(i).setValue(cardValue);
 		}
+		
 		deck.shuffle();
 		
+		// Give out starting cards to the player and the dealer
 		addToPlayerHand(deck.draw() );
 		addToDealerHand(deck.draw() );
 		addToPlayerHand(deck.draw() );
 		addToDealerHand(deck.draw() );
+		
+		holeCard = dealerHand.getCardAtIndex(1);
 		
 		holeCardValue = dealerHand.getCardAtIndex(1).getValue();
-		
+		dealerHandValue -= holeCardValue;
 	}
 	
 	public void addToPlayerHand(Card c) { 
@@ -59,5 +68,11 @@ public class BlackjackGame {
 	public void addToDealerHand(Card c) { 
 		dealerHand.addToHand(c); 
 		dealerHandValue += c.getValue();
+	}
+	
+	public boolean playerWon() {
+		if (playerHandValue <= 21 && (playerHandValue > dealerHandValue) ) return true;
+		
+		else return false;
 	}
 }

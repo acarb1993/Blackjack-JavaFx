@@ -30,7 +30,7 @@ public class Deck {
 	
 	public Stack<Card> getStack() { return stack; }
 	
-	// Generates all of the cards that will go in the deck unshuffled
+	// Generates all of the cards that will go in the stack unshuffled
 	public void generate() {
 		for (int i = 0; i < suits.length; i++) {
 			for (int j = 0; j < faces.length; j++) {
@@ -40,12 +40,12 @@ public class Deck {
 		}
 	}
 	
-	// Fisher-Yates shuffle. Emptys the deck from generate() and shuffles the cards in the array, then re-added to the deck
+	// Fisher-Yates shuffle. Emptys the stack from generate() and shuffles the cards in the array, then re-added to the stack
 	public void shuffle() {
 		Random r = new Random();
-		stack.clear();
+		stack.clear(); 
 		
-		// Swaps cards[i] with a random position in the deck then, puts that card into the random position
+		// Swaps cards[i] with a random position in the array then, puts that card into the random position
 		for (int i = 0; i < size; i++) {
 			int rand = r.nextInt(size - 1);
 			Card card = cards[i];
@@ -53,7 +53,7 @@ public class Deck {
 			cards[rand] = card;
 		}
 		
-		// Adds the cards to the deck once it's been shuffled
+		// Adds the cards to the stack once it's been shuffled
 		for (Card c : cards) { stack.add(c); }
 	}
 	
@@ -67,7 +67,7 @@ public class Deck {
 		}
 	}
 	
-	// Displays the entirity of the deck to the console.
+	// Displays the entirety of the deck to the console.
 	public void showStack() {
 		for (Card c : stack) {
 			System.out.println(c.toString() );

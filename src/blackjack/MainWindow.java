@@ -38,13 +38,11 @@ public class MainWindow {
 	
 	// Displays the Main Window of the program, this will be the first thing the user sees, asking to play the game or exit.
 	public void display(Stage w) { 
-		
 		window = w;
 		window.setTitle("Main Menu");
 		
 		windowLayout = new VBox();
 		windowLayout.setAlignment(Pos.CENTER);
-		windowLayout.setPadding(new Insets(5, 5, 5, 5));
 		windowLayout.setSpacing(10);
 		
 		scene = new Scene(windowLayout, width, height);
