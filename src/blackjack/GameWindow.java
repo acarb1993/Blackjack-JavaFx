@@ -19,7 +19,7 @@ public class GameWindow {
 	private VBox rightVBox, leftVBox;
 	private HBox topHBox, bottomHBox, centerHBox;
 	private Scene scene;
-	private Button hitButton, standButton, exitButton;
+	private Button hitButton, standButton, resetButton, exitButton;
 	private Label actionLabel, playerHandValueLabel, dealerHandValueLabel, statusLabel; // Labels what actions the user can do. Located at the right side of the window
 	
 	private BlackjackGame blackjackGame;
@@ -29,13 +29,6 @@ public class GameWindow {
 	public GameWindow() throws Exception {
 		width = 1200;
 		height = 900;
-		blackjackGame = new BlackjackGame();
-		blackjackGame.generateGame();
-	}
-	
-	public GameWindow(int w, int h) throws Exception {
-		width = w;
-		height = h;
 		blackjackGame = new BlackjackGame();
 		blackjackGame.generateGame();
 	}
@@ -97,6 +90,20 @@ public class GameWindow {
 		standButton = new Button("Stand");
 		setStandButtonAction();
 		
+		// Reset Button Configuration
+		resetButton = new Button("Reset");
+		resetButton.setOnAction(e -> {
+			try {
+				GameWindow gw = new GameWindow();
+				gw.display();
+				window.close();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		});
+		
 		// Exit Button Configuration
 		exitButton = new Button("Exit");
 		exitButton.setOnAction(e -> {
@@ -104,7 +111,7 @@ public class GameWindow {
 		});
 		
 		// Adding child nodes to the layouts.
-		rightVBox.getChildren().addAll(actionLabel, hitButton, standButton, exitButton);
+		rightVBox.getChildren().addAll(actionLabel, hitButton, standButton, resetButton, exitButton);
 		leftVBox.getChildren().addAll(playerHandValueLabel, dealerHandValueLabel);
 		centerHBox.getChildren().addAll(statusLabel);
 
@@ -124,7 +131,7 @@ public class GameWindow {
 		cardShape.setFill(Color.TRANSPARENT);
 		cardShape.setStroke(Color.BLACK);
 		
-		Label cardRankLabel = new Label(card.getRank() );
+		Label cardRankLabel = new Label();
 		
 		Label ofLabel = new Label();
 		
@@ -151,7 +158,34 @@ public class GameWindow {
 		}
 	}
 	
-	// Helper method to configure the action for the Hit button.
+	private StackPane replaceCardDrawing(Card card) {
+		StackPane sp = new StackPane();
+		
+		Rectangle cardShape = new Rectangle(112, 175);
+		cardShape.setFill(Color.TRANSPARENT);
+		cardShape.setStroke(Color.BLACK);
+		
+		Label cardRankLabel = new Label(card.getRank() );
+		
+		Label ofLabel = new Label();
+		
+		Label cardSuitLabel = new Label();
+		
+		cardRankLabel = new Label(card.getSuit() );
+		StackPane.setAlignment(cardRankLabel, Pos.TOP_CENTER);
+		
+		ofLabel = new Label("of");
+		StackPane.setAlignment(ofLabel, Pos.CENTER);
+		
+		cardSuitLabel = new Label(card.getRank() );
+		StackPane.setAlignment(cardSuitLabel, Pos.BOTTOM_CENTER);
+			
+		sp.getChildren().addAll(cardShape, cardRankLabel, ofLabel, cardSuitLabel);
+
+		return sp;
+	}
+	
+	// Helper method to configure the action for the Hit Button.
 	private void setHitButtonAction() {
 		hitButton.setOnAction(e -> {
 			
@@ -168,23 +202,48 @@ public class GameWindow {
 			
 			playerHandValueLabel.setText("Player Hand: " + blackjackGame.getPlayerHandValue() );
 			
+			if (blackjackGame.getPlayerHandValue() >= 21)
+				standButton.fire();
 		});
 	}
 	
-	// Helper method to configure the action for the Stand button.
+	// Helper method to configure the action for the Stand Button.
 	private void setStandButtonAction() {
 		standButton.setOnAction(e -> {
+			topHBox.getChildren().set(1, replaceCardDrawing(blackjackGame.getHoleCard() ) );
+			
 			blackjackGame.returnHoleCardValue();
 			dealerHandValueLabel.setText("Dealer Hand: " + blackjackGame.getDealerHandValue() );
 			
+			if (blackjackGame.getDealerHandValue() < 16) {
+				Card card = new Card();
+				try {
+					card = blackjackGame.getDeck().draw();
+					blackjackGame.addToDealerHand(card);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				createCardDrawing(topHBox, card);
+				
+				dealerHandValueLabel.setText("Dealer Hand: " + blackjackGame.getDealerHandValue() );
+			}
 			
-			if (blackjackGame.playerWon() ) {
+			if (blackjackGame.getPlayerHandValue() > 21 && blackjackGame.getDealerHandValue() > 21) {
+				statusLabel.setText("Draw!");
+			}
+				
+			else if (blackjackGame.playerWon() ) {
 				statusLabel.setText("Player Wins");
 			}
 			
 			else {
 				statusLabel.setText("Dealer Wins");
 			}
+			
+			hitButton.setDisable(true);
+			standButton.setDisable(true);
 		});
 	}
 	

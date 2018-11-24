@@ -1,6 +1,5 @@
 package blackjack;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,11 +12,9 @@ public class MainWindow {
 	private Stage window;
 	private Scene scene;
 	private VBox windowLayout;
-	private Button playButton;
-	private Button exitButton;
+	private Button playButton, exitButton;
 	private Label welcomeLabel;
 	private GameWindow gameWindow;
-	
 	
 	private int width;
 	private int height;
@@ -26,13 +23,6 @@ public class MainWindow {
 	public MainWindow() throws Exception {
 		width = 450;
 		height = 400;
-		gameWindow = new GameWindow();
-		
-	}
-	
-	public MainWindow(int w, int h) throws Exception {
-		width = w;
-		height = h;
 		gameWindow = new GameWindow();
 	}
 	

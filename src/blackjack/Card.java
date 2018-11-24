@@ -14,7 +14,6 @@ public class Card implements Comparable<Card> {
 		value = 0;
 		rank = r;
 		suit = s;
-		
 	}
 	
 	public Card(int v, String r, String s) {
@@ -40,8 +39,8 @@ public class Card implements Comparable<Card> {
 	public void setSuit(String s) { suit = s; }
 	
 	@Override
-	public int compareTo(Card c) { return this.getValue() - c.getValue(); }
+	public int compareTo(Card c) { return getValue() - c.getValue(); }
 	
-	public String toString() { return rank + " of " + suit; }
+	public String toString() { return rank + " of " + suit + " has a value of " + value; }
 
 }

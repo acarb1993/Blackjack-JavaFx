@@ -2,7 +2,7 @@ package blackjack;
 
 import java.util.LinkedList;
 
-public class Hand {
+public class Hand implements Comparable<Hand> {
 	private LinkedList<Card> hand;
 	
 	private int totalValue, size; //total value is the combined value of the cards in the hand
@@ -34,4 +34,7 @@ public class Hand {
 			System.out.println(c.toString() );
 		}
 	}
+	
+	@Override
+	public int compareTo(Hand h) { return getTotalValue() - h.getTotalValue(); }
 }

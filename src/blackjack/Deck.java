@@ -7,9 +7,8 @@ public class Deck {
 	private Stack<Card> stack;
 	
 	private Card[] cards = new Card[52];
-	private String[] suits = {"Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"};
-	private String[] faces = {"Clubs", "Diamonds", "Hearts", "Spades"};
-	
+	private String[] ranks = {"Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"};
+	private String[] suits = {"Clubs", "Diamonds", "Hearts", "Spades"};
 	
 	int capacity, size;
 	
@@ -26,15 +25,15 @@ public class Deck {
 	
 	public String[] getSuits() { return suits; }
 	
-	public String[] getFaces() { return faces; }
+	public String[] getRanks() { return ranks; }
 	
 	public Stack<Card> getStack() { return stack; }
 	
 	// Generates all of the cards that will go in the stack unshuffled
 	public void generate() {
-		for (int i = 0; i < suits.length; i++) {
-			for (int j = 0; j < faces.length; j++) {
-				cards[size++] = new Card(0, suits[i], faces[j]);
+		for (int i = 0; i < ranks.length; i++) {
+			for (int j = 0; j < suits.length; j++) {
+				cards[size++] = new Card(0, ranks[i], suits[j]);
 				stack.add(cards[size - 1]);
 			}
 		}
