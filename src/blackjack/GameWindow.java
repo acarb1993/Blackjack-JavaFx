@@ -9,6 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -21,7 +24,6 @@ public class GameWindow {
 	private Scene scene;
 	private Button hitButton, standButton, resetButton, exitButton;
 	private Label actionLabel, playerHandValueLabel, dealerHandValueLabel, statusLabel; // Labels what actions the user can do. Located at the right side of the window
-	
 	private BlackjackGame blackjackGame;
 	
 	private int width, height;
@@ -29,15 +31,17 @@ public class GameWindow {
 	public GameWindow() throws Exception {
 		width = 1200;
 		height = 900;
+		
 		blackjackGame = new BlackjackGame();
 		blackjackGame.generateGame();
 	}
 	
 	public void display() {
+		// Window Configuration
 		window = new Stage();
 		window.setTitle("Blackjack");
-		
-		// Layout of the window
+		window.setMinWidth(width);
+		window.setMinHeight(height);
 		windowLayout = new BorderPane();
 		
 		// Scene Configuration
@@ -92,37 +96,25 @@ public class GameWindow {
 		
 		// Reset Button Configuration
 		resetButton = new Button("Reset");
-		resetButton.setOnAction(e -> {
-			try {
-				GameWindow gw = new GameWindow();
-				gw.display();
-				window.close();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-		});
+		setResetButtonAction();
 		
 		// Exit Button Configuration
 		exitButton = new Button("Exit");
-		exitButton.setOnAction(e -> {
-			window.close();
-		});
+		setExitButtonAction();
 		
 		// Adding child nodes to the layouts.
 		rightVBox.getChildren().addAll(actionLabel, hitButton, standButton, resetButton, exitButton);
 		leftVBox.getChildren().addAll(playerHandValueLabel, dealerHandValueLabel);
 		centerHBox.getChildren().addAll(statusLabel);
 
+		// Creates the starting hand of the game
 		setupHandsDisplay(); 
 		
 		window.setScene(scene);
-		window.show();
-		
+		window.show();	
 	}
 	
-	// Helper Method that creates the shape and detail of a drawn card
+	// Helper Method that creates the shape and detail of a drawn card, this will initally not show the hole card
 	private void createCardDrawing(HBox hBox, Card card) {
 		StackPane sp = new StackPane();
 		hBox.getChildren().add(sp);
@@ -131,25 +123,12 @@ public class GameWindow {
 		cardShape.setFill(Color.TRANSPARENT);
 		cardShape.setStroke(Color.BLACK);
 		
-		Label cardRankLabel = new Label();
-		
-		Label ofLabel = new Label();
-		
-		Label cardSuitLabel = new Label();
-		
 		if (!blackjackGame.isHoleCard(card) ) {
-			cardRankLabel = new Label(card.getRank() );
-			StackPane.setAlignment(cardRankLabel, Pos.TOP_CENTER);
-		
-			ofLabel = new Label("of");
-			StackPane.setAlignment(ofLabel, Pos.CENTER);
-		
-			cardSuitLabel = new Label(card.getSuit() );
-			StackPane.setAlignment(cardSuitLabel, Pos.BOTTOM_CENTER);
-			
-			sp.getChildren().addAll(cardShape, cardRankLabel, ofLabel, cardSuitLabel);
+			Text cardText = createCardText(card);
+			sp.getChildren().addAll(cardShape, cardText);
 		}
 		
+		// The hole card is hidden from the player until the end of the game.
 		else {
 			Rectangle faceDown = new Rectangle(112, 175);
 			faceDown.setFill(Color.TRANSPARENT);
@@ -158,6 +137,7 @@ public class GameWindow {
 		}
 	}
 	
+	// Helper method to unveil the face down card in the dealers hand
 	private StackPane replaceCardDrawing(Card card) {
 		StackPane sp = new StackPane();
 		
@@ -165,22 +145,9 @@ public class GameWindow {
 		cardShape.setFill(Color.TRANSPARENT);
 		cardShape.setStroke(Color.BLACK);
 		
-		Label cardRankLabel = new Label(card.getRank() );
-		
-		Label ofLabel = new Label();
-		
-		Label cardSuitLabel = new Label();
-		
-		cardRankLabel = new Label(card.getSuit() );
-		StackPane.setAlignment(cardRankLabel, Pos.TOP_CENTER);
-		
-		ofLabel = new Label("of");
-		StackPane.setAlignment(ofLabel, Pos.CENTER);
-		
-		cardSuitLabel = new Label(card.getRank() );
-		StackPane.setAlignment(cardSuitLabel, Pos.BOTTOM_CENTER);
+		Text cardText = createCardText(card);
 			
-		sp.getChildren().addAll(cardShape, cardRankLabel, ofLabel, cardSuitLabel);
+		sp.getChildren().addAll(cardShape, cardText);
 
 		return sp;
 	}
@@ -188,7 +155,6 @@ public class GameWindow {
 	// Helper method to configure the action for the Hit Button.
 	private void setHitButtonAction() {
 		hitButton.setOnAction(e -> {
-			
 			Card card = new Card();
 			try {
 				card = blackjackGame.getDeck().draw();
@@ -230,7 +196,8 @@ public class GameWindow {
 				dealerHandValueLabel.setText("Dealer Hand: " + blackjackGame.getDealerHandValue() );
 			}
 			
-			if (blackjackGame.getPlayerHandValue() > 21 && blackjackGame.getDealerHandValue() > 21) {
+			if ((blackjackGame.getPlayerHandValue() > 21 && blackjackGame.getDealerHandValue() > 21) || 
+				 blackjackGame.getPlayerHandValue() == blackjackGame.getDealerHandValue() ) {
 				statusLabel.setText("Draw!");
 			}
 				
@@ -247,11 +214,40 @@ public class GameWindow {
 		});
 	}
 	
+	// Helper method to configure the action for the Reset Button
+	private void setResetButtonAction() {
+		resetButton.setOnAction(e -> {
+			try {
+				GameWindow gw = new GameWindow();
+				gw.display();
+				window.close();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			
+		});
+	}
+	
+	// Helper method to configure the action for the Exit Button
+	private void setExitButtonAction() {
+		exitButton.setOnAction(e -> {
+			window.close();
+		});
+	}
+	
 	// Sets up the display of the starting hands for the player and dealer to the Game Window
 	private void setupHandsDisplay() {
 		for (int i = 0; i < blackjackGame.getStartingHandSize(); i++) {
 			createCardDrawing(bottomHBox, blackjackGame.getPlayerHand().getCardAtIndex(i) );
 			createCardDrawing(topHBox, blackjackGame.getDealerHand().getCardAtIndex(i) );
 		}
+	}
+	
+	// Helper method to show the names of the cards in the Game Window
+	private Text createCardText(Card c) {
+		Text cardText = new Text(c.getRank() + "\n" + "of" + "\n" + c.getSuit() );
+		cardText.setTextAlignment(TextAlignment.CENTER);
+		cardText.setFont(new Font(23));
+		return cardText;
 	}
 }

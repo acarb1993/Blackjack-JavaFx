@@ -45,6 +45,7 @@ public class BlackjackGame {
 	// Makes the value of the Hole Card visible to the player.
 	public void returnHoleCardValue() { dealer.setTotalCardValue(dealer.getTotalCardValue() + holeCardValue); }
 	
+	// Generates the values of all the cards
 	public void generateGame() throws Exception {
 		deck.generate();
 		
