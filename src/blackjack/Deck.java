@@ -57,13 +57,9 @@ public class Deck {
 	}
 	
 	// Draw a card from the deck and return it.
-	public Card draw() throws Exception {
-		if (size <= 0) { throw new Exception("Error: Deck is empty!"); }
-		
-		else {
-			size--;
-			return stack.pop();
-		}
+	public Card draw() {
+		size--;
+		return stack.pop();
 	}
 	
 	// Displays the entirety of the deck to the console.

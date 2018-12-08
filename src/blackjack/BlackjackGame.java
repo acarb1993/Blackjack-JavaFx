@@ -46,7 +46,7 @@ public class BlackjackGame {
 	public void returnHoleCardValue() { dealer.setTotalCardValue(dealer.getTotalCardValue() + holeCardValue); }
 	
 	// Generates the values of all the cards
-	public void generateGame() throws Exception {
+	public void generateGame() {
 		deck.generate();
 		
 		for (int i = 0; i < deck.getSize(); i++) {

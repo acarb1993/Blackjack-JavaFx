@@ -28,7 +28,7 @@ public class GameWindow {
 	
 	private int width, height;
 
-	public GameWindow() throws Exception {
+	public GameWindow() {
 		width = 1200;
 		height = 900;
 		
@@ -123,18 +123,19 @@ public class GameWindow {
 		cardShape.setFill(Color.TRANSPARENT);
 		cardShape.setStroke(Color.BLACK);
 		
-		if (!blackjackGame.isHoleCard(card) ) {
-			Text cardText = createCardText(card);
-			sp.getChildren().addAll(cardShape, cardText);
-		}
+		Text cardText = createCardText(card);
+		sp.getChildren().addAll(cardShape, cardText);
+	}
+	
+	// Helper method to draw a card that is not revealed to the screen
+	private void createFaceDownCardDrawing(HBox hBox, Card card) {
+		StackPane sp = new StackPane();
+		hBox.getChildren().add(sp);
 		
-		// The hole card is hidden from the player until the end of the game.
-		else {
-			Rectangle faceDown = new Rectangle(112, 175);
-			faceDown.setFill(Color.TRANSPARENT);
-			faceDown.setStroke(Color.BLACK);
-			sp.getChildren().add(faceDown);
-		}
+		Rectangle faceDown = new Rectangle(112, 175);
+		faceDown.setFill(Color.TRANSPARENT);
+		faceDown.setStroke(Color.BLACK);
+		sp.getChildren().add(faceDown);
 	}
 	
 	// Helper method to unveil the face down card in the dealers hand
@@ -155,15 +156,8 @@ public class GameWindow {
 	// Helper method to configure the action for the Hit Button.
 	private void setHitButtonAction() {
 		hitButton.setOnAction(e -> {
-			Card card = new Card();
-			try {
-				card = blackjackGame.getDeck().draw();
-				blackjackGame.addToPlayerHand(card);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
+			Card card = blackjackGame.getDeck().draw();
+			blackjackGame.addToPlayerHand(card);
 			createCardDrawing(bottomHBox, card);
 			
 			playerHandValueLabel.setText("Player Hand: " + blackjackGame.getPlayerHandValue() );
@@ -182,14 +176,8 @@ public class GameWindow {
 			dealerHandValueLabel.setText("Dealer Hand: " + blackjackGame.getDealerHandValue() );
 			
 			if (blackjackGame.getDealerHandValue() < 16) {
-				Card card = new Card();
-				try {
-					card = blackjackGame.getDeck().draw();
-					blackjackGame.addToDealerHand(card);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				Card card = blackjackGame.getDeck().draw();
+				blackjackGame.addToDealerHand(card);
 				
 				createCardDrawing(topHBox, card);
 				
@@ -217,14 +205,9 @@ public class GameWindow {
 	// Helper method to configure the action for the Reset Button
 	private void setResetButtonAction() {
 		resetButton.setOnAction(e -> {
-			try {
-				GameWindow gw = new GameWindow();
-				gw.display();
-				window.close();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			
+			GameWindow gw = new GameWindow();
+			gw.display();
+			window.close();
 		});
 	}
 	
@@ -239,7 +222,12 @@ public class GameWindow {
 	private void setupHandsDisplay() {
 		for (int i = 0; i < blackjackGame.getStartingHandSize(); i++) {
 			createCardDrawing(bottomHBox, blackjackGame.getPlayerHand().getCardAtIndex(i) );
-			createCardDrawing(topHBox, blackjackGame.getDealerHand().getCardAtIndex(i) );
+			
+			if (blackjackGame.getDealerHand().getCardAtIndex(i) != blackjackGame.getHoleCard() ) 
+				createCardDrawing(topHBox, blackjackGame.getDealerHand().getCardAtIndex(i) );
+			
+			else 
+				createFaceDownCardDrawing(topHBox, blackjackGame.getDealerHand().getCardAtIndex(i) );
 		}
 	}
 	

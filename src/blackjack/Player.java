@@ -20,9 +20,7 @@ public class Player implements Comparable<Player>{
 	// Class Methods
 	public void addToPlayerHand(Card c) { 
 		hand.addToHand(c); 
-		
 		totalCardValue += c.getValue();
-		
 		checkForAces(c);
 	}
 	
